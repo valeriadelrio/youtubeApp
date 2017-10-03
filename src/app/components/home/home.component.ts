@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { YoutubeService } from '../../services/youtube.service';
+
+declare var $:any;
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -8,15 +10,29 @@ import { YoutubeService } from '../../services/youtube.service';
 export class HomeComponent implements OnInit {
 
   videos: any[]=[];
+  videoSel: any;
   constructor(public _ys:YoutubeService) {
     this._ys.getVideos()
-            .subscribe(videos => {
-              console.log(videos);
-              this.videos=videos; 
-            });
+            .subscribe(videos =>this.videos=videos);
   }
 
   ngOnInit() {
+  }
+
+  verVideo( video: any){
+    this.videoSel = video;
+    $('#myModal').modal();
+  }
+
+  cerrarModal(){
+    this.videoSel = null;
+    $('#myModal').modal('hide');
+  }
+
+  cargarMas(){
+    this._ys.getVideos()
+            .subscribe(videos =>this.videos.push.apply(this.videos, videos));
+
   }
 
 }
